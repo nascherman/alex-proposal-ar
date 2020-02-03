@@ -14,14 +14,29 @@
    limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SecretArActivity">
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/frame_layout"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".SecretArActivity">
 
-  <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
-      android:id="@+id/ux_fragment"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-
+    <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
+              android:id="@+id/ux_fragment"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/fab"
+                                                                           android:layout_width="wrap_content"
+                                                                           android:layout_height="wrap_content"
+                                                                           android:baselineAlignBottom="true"
+                                                                           android:clickable="false"
+                                                                           android:state_enabled="false"
+                                                                           tools:fabSize="auto"
+                                                                           android:hapticFeedbackEnabled="true"
+                                                                           android:layout_gravity="bottom|right"
+                                                                           android:adjustViewBounds="false"
+                                                                           android:layout_marginRight="30dp"
+                                                                           android:layout_marginBottom="30dp"
+                                                                           app:elevation="@android:dimen/notification_large_icon_height"
+                                                                           app:srcCompat="@drawable/ic_refresh"
+                                                                           app:backgroundTint="@color/design_default_color_surface"/>
 </FrameLayout>

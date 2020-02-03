@@ -21,23 +21,40 @@ import android.content.Context
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
+import com.google.android.material.chip.Chip
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textview.MaterialTextView
 import com.google.ar.core.HitResult
 import com.google.ar.core.Plane
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.Node
+import com.google.ar.sceneform.collision.Box
+import com.google.ar.sceneform.collision.CollisionShape
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import com.nick.secretar.builder.ModelBuilder
+import com.nick.secretar.builder.ModelItem
+import com.nick.secretar.builder.RenderableItem
+import java.util.*
 
 
 class SecretArActivity : AppCompatActivity() {
 
     private var arFragment: ArFragment? = null
     private var heartRenderable: ModelRenderable? = null
+    private var tapIndex = 0;
+    private var APP_SCALE: Float = 0.25f
+    private var nodeList = emptyList<Node>().toMutableList()
 
     override// CompletableFuture requires api level 24
     // FutureReturnValueIgnored is not valid
@@ -49,36 +66,83 @@ class SecretArActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_ux)
+
+        val buttonView = findViewById<FloatingActionButton>(R.id.fab)
+        buttonView.isEnabled = false
+        buttonView.setOnClickListener(View.OnClickListener {
+            nodeList.forEach { it ->
+                it.isEnabled = false
+                arFragment!!.arSceneView.scene.removeChild(it)
+            }
+            tapIndex = 0
+            setButtonState(false)
+        })
+
         arFragment = supportFragmentManager.findFragmentById(R.id.ux_fragment) as ArFragment?
 
-        // When you build a Renderable, Sceneform loads its resources in the background while returning
-        // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
-        ModelRenderable.builder()
-                .setSource(this, R.raw.heart)
-                .build()
-                .thenAccept { renderable -> heartRenderable = renderable }
-                .exceptionally { throwable ->
-                    val toast = Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG)
-                    toast.setGravity(Gravity.CENTER, 0, 0)
-                    toast.show()
-                    null
-                }
+        var modelBuilder = ModelBuilder(arrayOf(
+                ModelItem(R.raw.iggy, "Iggy", getDrawable(R.drawable.blackcat)),
+                ModelItem(R.raw.miso, "Miso", getDrawable(R.drawable.cat)),
+                ModelItem(R.raw.alex, "Alex Gracie...", getDrawable(R.drawable.heart)),
+                ModelItem(R.raw.nick, "Will you marry me?", getDrawable(R.drawable.engagement))),
+                this,
+                R.layout.text_view
+        ).build()
 
         arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane, motionEvent: MotionEvent ->
-            if (heartRenderable != null) {
+            val itemRenderable: RenderableItem? = modelBuilder.get(tapIndex);
+            if (itemRenderable != null && tapIndex < modelBuilder.size()) {
+                tapIndex++;
+
+                val box: Box? = itemRenderable.renderable.getCollisionShape() as Box?
+
                 // Create the Anchor.
                 val anchor = hitResult.createAnchor()
                 val anchorNode = AnchorNode(anchor)
                 anchorNode.setParent(arFragment!!.arSceneView.scene)
-
                 // Create the transformable andy and add it to the anchor.
-                val heart = TransformableNode(arFragment!!.transformationSystem)
-                heart.setParent(anchorNode)
-                heart.renderable = heartRenderable
-                heart.select()
+                val item = TransformableNode(arFragment!!.transformationSystem)
+                item.scaleController.minScale = 0.1f
+                item.localScale = Vector3(APP_SCALE, APP_SCALE, APP_SCALE)
+                item.setParent(anchorNode)
+                item.renderable = itemRenderable.renderable
+
+                val text = TransformableNode(arFragment!!.transformationSystem)
+                text.scaleController.minScale = 0.1f
+                text.scaleController.maxScale = 10f
+                text.localPosition = Vector3(0f, box!!.size.y * APP_SCALE, 0f)
+                text.localScale = Vector3(1f, 1f, 1f)
+                text.setParent(anchorNode)
+
+                val textView: Chip = itemRenderable.textRenderable.view as Chip
+                textView.text = itemRenderable.name
+                textView.chipIcon = itemRenderable.icon
+                text.renderable = itemRenderable.textRenderable
+
+                text.isEnabled = true
+                item.select()
+
+                nodeList.add(anchorNode)
+
+                if (tapIndex == modelBuilder.size()) {
+                    setButtonState(true)
+                }
             }
         }
     }
+
+    private fun setButtonState(enabled: Boolean) {
+        val buttonView = findViewById<FloatingActionButton>(R.id.fab)
+        if (enabled) {
+            buttonView.isClickable = true
+            buttonView.isEnabled = true
+        } else {
+            buttonView.isClickable = false
+            buttonView.isEnabled = false
+        }
+    }
+
+
 
     companion object {
         private val TAG = SecretArActivity::class.java.simpleName

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+                                       xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/text_view"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="wrap_content"
+                                       android:layout_weight="1"
+                                       android:gravity="center"
+                                       android:orientation="vertical"
+                                       android:padding="6dp"
+                                       android:text=""
+                                       android:textAlignment="center"
+                                       android:textColor="@color/design_default_color_on_secondary"
+                                       app:chipIconEnabled="true"
+                                       android:textAppearance="@style/TextAppearance.MyApp.Headline1"
+                                       app:chipBackgroundColor="@color/design_default_color_background"/>

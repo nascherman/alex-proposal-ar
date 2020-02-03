@@ -14,18 +14,11 @@
    limitations under the License.
 -->
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-    </style>
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
 
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
     </style>
-
-    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+    <style name="TextAppearance.MyApp.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/montezregular</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

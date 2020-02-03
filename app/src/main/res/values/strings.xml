@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-   Copyright 2018 Google LLC.
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <resources>
-    <string name="app_name">Hello Sceneform</string>
-
+    <string name="app_name">Family</string>
     <string name="title_activity_intro">IntroActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="intro_title">TITLE</string>
-    <string name="intro_content">DUMMY CONTENT DUMMY CONTENT DUMMY CONTENT DUMMY CONTENT DUMMY CONTENT</string>
+    <string name="intro_button">Continue</string>
+    <string name="intro_title">Alex Gracie</string>
+    <string-array name="intro_content">
+        <item>The past %1$s or so days have been the greatest of my life.</item>
+        <item>This little app is an homage to our time together, and the value of family.</item>
+    </string-array>
 </resources>
